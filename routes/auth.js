@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Castomer = require("../models/Castomer");
 const CryptoJS = require("crypto-js");
+const jwt = require("jsonwebtoken");
 
 
 //isRegistered
@@ -20,5 +21,50 @@ router.post("/register", async (req, res)=>{
     }
    
 });
+
+
+
+//isLoggedIn
+router.post("/login", async(req,res)=>{
+    try{
+        const castomer = await Castomer.findOne(
+            {
+                username: req.body.username
+            }
+        );
+
+        if(!castomer){
+            res.status(401).json("Wrong username.");
+        } 
+
+        const descryptedPassword = CryptoJS.AES.decrypt(
+            castomer.password,
+            process.env.SECRET_PASSWORD
+        );
+
+        const password = descryptedPassword.toString(CryptoJS.enc.Utf8)
+
+        if(password!==req.body.password){
+            res.status(401).json("Wrong password.");
+        }
+        const jwtToken = jwt.sign({
+            id:castomer._id,
+            isAdmin: castomer.isAdmin,
+            
+        }, process.env.JWT,
+        {expiresIn:"3d"}
+        );
+
+
+        const {newPassword, ...others}=castomer._doc;
+        res.status(200).json({...others, jwtToken});
+
+
+    }
+   
+    catch(error){
+        res.status(400).json(error)
+    }
+})
 
 module.exports = router
