@@ -6,6 +6,7 @@ const authRoute = require('./routes/auth');
 const castomerRoute = require('./routes/castomer');
 const flowerRoute = require('./routes/flower');
 const orderRoute = require('./routes/order');
+const billRoute = require('./routes/bill');
 
 
 const app = express();
@@ -26,6 +27,7 @@ app.use("/api/auth", authRoute);
 app.use("/api/castomer", castomerRoute);
 app.use("/api/flower", flowerRoute);
 app.use("/api/order", orderRoute);
+app.use("/api/bill", billRoute);
 
 
 
