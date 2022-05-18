@@ -20,4 +20,26 @@ const verifyToken = (req,res, next)=>{
 
   }
 }
-module.exports={verifyToken};
+
+
+const verifyAuthorizationWithToken = (req, res, next) => {
+    verifyToken(req, res, next, () => {
+      if (req.castomer.id === req.params.id || req.castomer.isAdmin) {
+        next();
+      } else {
+        res.status(403).json("You are not authorized to do that!");
+      }
+    });
+  };
+
+  const verifyAdminWithToken = (req, res, next) => {
+    verifyToken(req, res, () => {
+      if (req.castomer.isAdmin) {
+        next();
+      } else {
+        res.status(403).json("You are not an ADMIN and you can not to do that!");
+      }
+    });
+  };
+
+module.exports={verifyToken, verifyAuthorizationWithToken, verifyAdminWithToken};
