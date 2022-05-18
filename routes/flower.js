@@ -61,7 +61,7 @@ router.delete("/:id", verifyAdminWithToken, async (req, res) => {
     try {
       let flowers;
    if(flowerCategory){
-        flowers = await Flower.find({categoriesl:{
+        flowers = await Flower.find({categories:{
               $in:[flowerCategory],
           },
     });

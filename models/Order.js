@@ -13,7 +13,7 @@ const OrderSchema = new mongoose.Schema(
             }
         }
     ],
-      status:{type:String, default:"The coffee is making."},
+      status:{type:String, default:"Your order is being prepared."},
     },
     {timestamps:true}
 )
